@@ -1,26 +1,15 @@
 "use client"
 import Grid from "./_components/Grid/Grid";
 import GameConsole from "./_components/GameConsole/GameConsole";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {getCoordinateFromFlatIndex, getMapOfAliveCellsForNextRound } from "@/utils/game";
 
 export default function Home() {
-  const [gridAliveState, setGridAliveState] = useState<boolean[][]>([]);
   const [mapOfAliveCells, setMapOfAliveCells] = useState<Map<number, number>>(new Map());
-  const [aliveCells, setAliveCells] = useState<number[]>([]); // stores flat indices of alive cells
+  const [timeIntervalBetweenStates, setTimeIntervalBetweenStates] = useState<number>(100); //how long the app waits until updating the grid state
+  const gameIntervalObject = useRef<NodeJS.Timeout>();
   const rows = 30
   const columns = 30
-
-  useEffect(() => {
-      const grid:boolean[][] = new Array(rows);
-      for(let i = 0; i < columns; i++) {
-          grid.push(Array.from({length: columns}, () => false))
-      }
-
-      console.log("grid - ", grid);
-
-      setGridAliveState(grid);
-  }, [rows, columns]);
 
   const evalutateNextStep = () => {
     setMapOfAliveCells(prev => {
@@ -31,6 +20,30 @@ export default function Home() {
       )
     })
     
+  }
+
+  const start = () => {
+    if(gameIntervalObject.current) return;
+    evalutateNextStep();
+    gameIntervalObject.current = setInterval(() => {
+      evalutateNextStep();
+    }, timeIntervalBetweenStates);
+  }
+
+  const stop = () => {
+    if(gameIntervalObject.current) {
+      clearInterval(gameIntervalObject.current);
+    }
+
+    gameIntervalObject.current = undefined;
+  }
+
+  const onStartButtonClick = () => {
+    start();
+  }
+
+  const onStopButtonClick = () => {
+    stop();
   }
 
   const onConsoleNextButtonClick = () => {
@@ -168,6 +181,8 @@ export default function Home() {
       <GameConsole 
           className="mt-6"
           onNextButtonClick={onConsoleNextButtonClick} 
+          onStartButtonClick={onStartButtonClick}
+          onStopButtonClick={onStopButtonClick}
       />
     </main>
   );
