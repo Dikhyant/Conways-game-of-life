@@ -3,13 +3,29 @@ import Grid from "./_components/Grid/Grid";
 import GameConsole from "./_components/GameConsole/GameConsole";
 import { useEffect, useRef, useState } from "react";
 import {getCoordinateFromFlatIndex, getMapOfAliveCellsForNextRound } from "@/utils/game";
+import Patterns from "./_components/Patterns/Patterns";
+import { patterns } from "@/db/patterns/pattern-manager";
+
+type TPatternThumbnail = React.ComponentProps<typeof Patterns>["patternThumbnails"][0]
+
+const patternThumbnails: TPatternThumbnail[] = patterns.map(item => ({id: item.id, image: item.image}))
 
 export default function Home() {
   const [mapOfAliveCells, setMapOfAliveCells] = useState<Map<number, number>>(new Map());
   const [timeIntervalBetweenStates, setTimeIntervalBetweenStates] = useState<number>(100); //how long the app waits until updating the grid state
   const gameIntervalObject = useRef<NodeJS.Timeout>();
-  const rows = 30
-  const columns = 30
+  const rows = 30;
+  const columns = 30;
+
+  useEffect(() => {
+    console.log("mapOfAliveCells - ",mapOfAliveCells);
+  }, [mapOfAliveCells]);
+
+  useEffect(() => {
+    if(!gameIntervalObject.current) return;
+    stop();
+    start();
+  }, [timeIntervalBetweenStates]);
 
   const evalutateNextStep = () => {
     setMapOfAliveCells(prev => {
@@ -48,6 +64,14 @@ export default function Home() {
 
   const onConsoleNextButtonClick = () => {
     evalutateNextStep();
+  }
+
+  const onResetButtonClick = () => {
+    setMapOfAliveCells(new Map<number, number>());
+  }
+
+  const onTimeIntervalChange = (value: number) => {
+    setTimeIntervalBetweenStates(value);
   }
 
   const onCellClick = (flatIndex: number) => {
@@ -170,6 +194,13 @@ export default function Home() {
       return newState;
     })
   }
+
+  const onPatternImageClick = (id: string) => {
+    const patternObj = patterns.find(item => item.id === id);
+    if(patternObj?.pattern) {
+      setMapOfAliveCells(patternObj.pattern)
+    }
+  }
   return (
     <main className="min-h-screen w-full bg-black" >
       <Grid
@@ -180,9 +211,17 @@ export default function Home() {
       />
       <GameConsole 
           className="mt-6"
+          timeInterval={`${timeIntervalBetweenStates}`}
           onNextButtonClick={onConsoleNextButtonClick} 
           onStartButtonClick={onStartButtonClick}
           onStopButtonClick={onStopButtonClick}
+          onTimeIntervalChange={onTimeIntervalChange}
+          onResetButtonClick={onResetButtonClick}
+      />
+      <Patterns
+          className="mt-6"
+          patternThumbnails={patternThumbnails}
+          onImageClick={onPatternImageClick}
       />
     </main>
   );

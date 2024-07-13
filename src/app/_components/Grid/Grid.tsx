@@ -27,8 +27,8 @@ const Grid:React.FC<IGridProps> = (props) => {
         <div className={twMerge("grid gap-1 w-full")} 
 
             style={{
-                gridTemplateRows: `repeat(${rows}, 40px)`,
-                gridTemplateColumns: `repeat(${columns}, 40px)`
+                gridTemplateRows: `repeat(${rows}, 20px)`,
+                gridTemplateColumns: `repeat(${columns}, 20px)`
             }}
         >
             {
