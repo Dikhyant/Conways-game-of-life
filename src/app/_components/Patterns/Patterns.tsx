@@ -1,5 +1,5 @@
-import { cn } from "@/utils/misc";
-import Image, { StaticImageData } from "next/image";
+import {cn} from "@/utils/misc";
+import Image, {StaticImageData} from "next/image";
 
 interface IPatternsProps {
     patternThumbnails: TPatternThumbnail[];
@@ -12,19 +12,19 @@ type TPatternThumbnail = {
     image: StaticImageData;
 }
 
-const Patterns:React.FC<IPatternsProps> = (props) => {
+const Patterns: React.FC<IPatternsProps> = (props) => {
     const {
         patternThumbnails,
         className
     } = props;
 
     const onImageClick = (id: string) => {
-        if(props.onImageClick instanceof Function && props.onImageClick.length === 1) {
+        if (props.onImageClick instanceof Function && props.onImageClick.length === 1) {
             props.onImageClick(id);
         }
     }
     return (
-        <div className={cn("flex flex-wrap w-full gap-2", className)} >
+        <div className={cn("flex flex-wrap w-full gap-2", className)}>
             {
                 patternThumbnails.map(item => {
                     return (

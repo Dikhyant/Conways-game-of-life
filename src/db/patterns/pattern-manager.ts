@@ -2,7 +2,7 @@ import HeartPatternImage from "~/public/assets/images/heart-pattern.png";
 import heartPattern from "./heart.json";
 import Pattern2Image from "~/public/assets/images/pattern-2.png";
 import pattern2 from "./pattern-2.json";
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 
 export type TPattern = {
     id: string;
@@ -15,10 +15,10 @@ export type TPatternCell = {
     value: number;
 }
 
-const getPatternMapFromPatternArray = (p: TPatternCell[]):Map<number, number> => {
-    const map:Map<number, number> = new Map<number, number>();
+const getPatternMapFromPatternArray = (p: TPatternCell[]): Map<number, number> => {
+    const map: Map<number, number> = new Map<number, number>();
 
-    for(let i = 0; i < p.length; i++) {
+    for (let i = 0; i < p.length; i++) {
         map.set(p[i].key, p[i].value);
     }
     return map;

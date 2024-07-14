@@ -1,6 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
-import { twMerge } from "tailwind-merge";
+import {twMerge} from "tailwind-merge";
 import Cell from "../Cell/Cell";
 
 interface IGridProps {
@@ -10,7 +9,7 @@ interface IGridProps {
     onCellClick?: ((flatIndex: number) => void);
 }
 
-const Grid:React.FC<IGridProps> = (props) => {
+const Grid: React.FC<IGridProps> = (props) => {
     const {
         rows,
         columns,
@@ -18,18 +17,18 @@ const Grid:React.FC<IGridProps> = (props) => {
     } = props;
 
     const onCellClick = (flatIndex: number) => {
-        if(props.onCellClick instanceof Function && props.onCellClick.length === 1) {
+        if (props.onCellClick instanceof Function && props.onCellClick.length === 1) {
             props.onCellClick(flatIndex);
         }
     }
 
     return (
-        <div className={twMerge("grid gap-1 w-full")} 
+        <div className={twMerge("grid gap-1 w-full")}
 
-            style={{
-                gridTemplateRows: `repeat(${rows}, 20px)`,
-                gridTemplateColumns: `repeat(${columns}, 20px)`
-            }}
+             style={{
+                 gridTemplateRows: `repeat(${rows}, 20px)`,
+                 gridTemplateColumns: `repeat(${columns}, 20px)`
+             }}
         >
             {
                 Array.from({length: rows}, () => Array.from({length: columns})).flat().map((item, index) => {
@@ -39,11 +38,13 @@ const Grid:React.FC<IGridProps> = (props) => {
                             key={index}
                             isAlive={isAlive}
                             className="w-full h-full"
-                            onClick={() => {onCellClick(index)}}
+                            onClick={() => {
+                                onCellClick(index)
+                            }}
                         />
                     )
                 })
-                
+
             }
         </div>
     )

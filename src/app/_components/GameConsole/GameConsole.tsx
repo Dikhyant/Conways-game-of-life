@@ -1,7 +1,8 @@
-import { cn } from "@/utils/misc";
-import { ChangeEvent } from "react";
+import {cn} from "@/utils/misc";
+import {ChangeEvent} from "react";
 
 interface IGameConsoleProps {
+    isGameOn?: boolean;
     className?: string;
     timeInterval: string;
     onStartButtonClick?: (() => void);
@@ -11,51 +12,57 @@ interface IGameConsoleProps {
     onTimeIntervalChange?: ((value: number) => void);
 }
 
-const GameConsole:React.FC<IGameConsoleProps> = (props) => {
+const GameConsole: React.FC<IGameConsoleProps> = (props) => {
     const {
+        isGameOn,
         className,
         timeInterval,
     } = props;
 
     const onStartButtonClick = () => {
-        if(props.onStartButtonClick instanceof Function) {
+        if (props.onStartButtonClick instanceof Function) {
             props.onStartButtonClick();
         }
     }
 
     const onStopButtonClick = () => {
-        if(props.onStopButtonClick instanceof Function) {
+        if (props.onStopButtonClick instanceof Function) {
             props.onStopButtonClick();
         }
     }
 
     const onNextButtonClick = () => {
-        if(props.onNextButtonClick instanceof Function) {
+        if (props.onNextButtonClick instanceof Function) {
             props.onNextButtonClick();
         }
     }
 
     const onResetButtonClick = () => {
-        if(props.onResetButtonClick instanceof Function) {
+        if (props.onResetButtonClick instanceof Function) {
             props.onResetButtonClick();
         }
     }
 
     const onTimeIntervalChange = (event: ChangeEvent<HTMLInputElement>) => {
-        console.log("value - ",event.target.value);
-        if(props.onTimeIntervalChange instanceof Function && props.onTimeIntervalChange.length === 1) {
+        console.log("value - ", event.target.value);
+        if (props.onTimeIntervalChange instanceof Function && props.onTimeIntervalChange.length === 1) {
             props.onTimeIntervalChange(parseInt(event.target.value));
         }
     }
     return (
-        <div className={cn("w-full flex gap-x-5", className)} >
-            <button className="p-3 bg-white" onClick={onStartButtonClick} >Start</button>
-            <button className="p-3 bg-white" onClick={onStopButtonClick} >Stop</button>
-            <button className="p-3 bg-white" onClick={onNextButtonClick} >Next</button>
-            <button className="p-3 bg-white" onClick={onResetButtonClick} >Reset</button>
+        <div className={cn("w-full flex gap-x-5", className)}>
+            {
+                isGameOn ? (
+                    <button className="p-3 bg-white" onClick={onStopButtonClick}>Stop</button>
+                ) : (
+                    <button className="p-3 bg-white" onClick={onStartButtonClick}>Start</button>
+                )
+            }
+            <button className="p-3 bg-white" onClick={onNextButtonClick}>Next</button>
+            <button className="p-3 bg-white" onClick={onResetButtonClick}>Reset</button>
             <div>
-                <label className="text-white block" >Time interval</label>
-                <input type="range" min={100} max={1000} value={timeInterval} onChange={onTimeIntervalChange} />
+                <label className="text-white block">Time interval</label>
+                <input type="range" min={100} max={1000} value={timeInterval} onChange={onTimeIntervalChange}/>
             </div>
         </div>
     )
